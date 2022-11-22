@@ -20,6 +20,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('title', 100);
+            $table->string('slug')->unique();
             $table->text('description', 2000);
             $table->date('start_date');
             $table->date('end_date');
