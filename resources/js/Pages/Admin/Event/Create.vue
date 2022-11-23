@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/inertia-vue3';
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -34,14 +34,11 @@ function onFileChange() {
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Event
+                <Link :href="route('admin.events.create')">New Event</Link>
             </h2>
         </template>
 
         <div class="card">
-            <div class="card-header">
-                New Event
-            </div>
             <form
                 class="form-horizontal"
                 @submit.prevent="

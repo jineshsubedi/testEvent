@@ -21,9 +21,10 @@ const form = useForm();
             <div class="col-md-8 offset-md-2">
                 <div class="card">
                     <img :src="event.image_url" class="card-img-top" :alt="event.title" v-if="event.image != null" />
+                    <img src="/images/default.jpg" alt="">
                     <div class="card-body">
                         <h5 class="card-title">{{event.title}}</h5>
-                        <p class="text-muted">Creator: {{event.user.name}}</p>
+                        <p class="text-muted">Creator: {{event.user ? event.user.name : ''}}</p>
                         <p class="card-text " v-html="event.description">
                            
                         </p>

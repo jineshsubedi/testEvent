@@ -125,26 +125,23 @@ class EventController extends Controller
         {
             if(request()->type == 'upcomming')
             {
-                $query->whereDate('start_date', '>' , date('Y-m-d'));
+                $query->upcomming();
             }
             if(request()->type == 'running')
             {
-                $query->whereDate('start_date', '<=' , date('Y-m-d'))
-                    ->whereDate('end_date', '>=', date('Y-m-d'));
+                $query->running();
             }
             if(request()->type == 'finished')
             {
-                $query->whereDate('end_date', '<' , date('Y-m-d'));
+                $query->finished();
             }
             if(request()->type == 'latest_upcomming')
             {
-                $query->whereDate('start_date', '>' , date('Y-m-d'))
-                    ->whereDate('start_date', '<=', Carbon::today()->addDays(7));
+                $query->latestUpcomming();
             }
             if(request()->type == 'earliest_finish')
             {
-                $query->whereDate('end_date', '<' , date('Y-m-d'))
-                    ->whereDate('end_date', '>=', Carbon::today()->subDays(7));
+                $query->earliestFinish();
             }
         }
         return $query;

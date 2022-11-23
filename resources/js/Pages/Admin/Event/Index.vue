@@ -22,7 +22,7 @@ function destroy(id) {
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Event
+                <Link :href="route('admin.events.index')">Event</Link> 
             </h2>
         </template>
 

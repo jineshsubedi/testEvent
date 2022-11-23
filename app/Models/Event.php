@@ -12,6 +12,8 @@ class Event extends Model
 {
     use HasFactory;
 
+    const DAY = 7;
+
     protected $fillable = ['user_id', 'title', 'slug', 'description', 'start_date', 'end_date', 'image'];
 
     protected $appends = ['image_url', 'status'];
@@ -71,5 +73,29 @@ class Event extends Model
         else{
             return '';
         }
+    }
+
+    public function scopeRunning($query)
+    {
+        return $query->whereDate('start_date', '<=' , date('Y-m-d'))
+        ->whereDate('end_date', '>=', date('Y-m-d'));
+    }
+    public function scopeUpcomming($query)
+    {
+        return $query->whereDate('start_date', '>' , date('Y-m-d'));
+    }
+    public function scopeFinished($query)
+    {
+        return $query->whereDate('end_date', '<' , date('Y-m-d'));
+    }
+    public function scopeLatestUpcomming($query)
+    {
+        return $query->whereDate('start_date', '>' , date('Y-m-d'))
+        ->whereDate('start_date', '<=', Carbon::today()->addDays(self::DAY));
+    }
+    public function scopeEarliestFinish($query)
+    {
+        return $query->whereDate('end_date', '<' , date('Y-m-d'))
+        ->whereDate('end_date', '>=', Carbon::today()->subDays(self::DAY));
     }
 }

@@ -17,13 +17,20 @@ Event Manager is a web applcation to track event happening on.
     - Open Terminal Inside Project Folder and run `composer install`
     - Create database
     - copy .env.example to .env
+        - update database information in .env
+        - set `APP_DEBUG=FALSE` for production
+        - set `FILESYSTEM_DISK=public`
     - `php artisan key:generate`
-    - update database information in .env
     - `php artisan migrate` to install all the required tables
-    - set `APP_DEBUG=FALSE` for production
-    - set `FILESYSTEM_DISK=public`
-    - `php artisan storage:link`
+    - `php artisan storage:link` for storing the event images
     - To run the project
         - `php artisan serve` in one terminal
         - `npm run dev` in another terminal for local
         - `npm run build` in production
+    - to run test `php artisan test` 
+
+## Guideline
+    - Change the Admin credential from UserSeeder inside Seeders folder.
+    - Either Register as a new User or Run `php artisan db:seed`.
+    - In Dashboard select Event menu tab and perform crud operation.
+    - Event Testing can be found inside test/Feature.

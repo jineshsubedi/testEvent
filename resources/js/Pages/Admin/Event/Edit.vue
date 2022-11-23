@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { Head, useForm } from '@inertiajs/inertia-vue3';
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -48,14 +48,11 @@ function submitForm() // due to limitation of multipart/form-data in put method
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Event
+                <Link :href="route('admin.events.create')">Edit Event</Link>
             </h2>
         </template>
 
         <div class="card">
-            <div class="card-header">
-                Edit Event
-            </div>
             <form
                 class="form-horizontal"
                 @submit.prevent="
