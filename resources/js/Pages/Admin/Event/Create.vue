@@ -1,11 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import Pagination from "@/Components/Pagination.vue";
+import { Head, useForm } from '@inertiajs/inertia-vue3';
+import { ref } from 'vue';
 
 const props = defineProps({
     events: Object,
-    filters: Object
 })
 const form = useForm({
     title: null,
@@ -15,12 +14,17 @@ const form = useForm({
     end_date: null,
     banner: null,
 });
+let imageSelected = ref('')
 
 function generateSlug()
 {
     form.slug =  form.title.toLowerCase()
-            .replace(/ /g, '-')
-            .replace(/[^\w-]+/g, '');
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '');
+}
+
+function onFileChange() {
+    imageSelected.value = URL.createObjectURL(form.banner);
 }
 </script>
 
@@ -163,7 +167,10 @@ function generateSlug()
                             class="form-control"
                             id="banner"
                             @input="form.banner = $event.target.files[0]"
+                            @change="onFileChange"
+                            accept="image/*"
                         />
+                        <img :src="imageSelected" style="width: 100px" v-if="imageSelected != null" />
                         <div
                             class="text-red-400 text-sm"
                             v-if="form.errors.banner"

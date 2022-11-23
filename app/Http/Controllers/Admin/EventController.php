@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EventRequest;
 use App\Models\Event;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class EventController extends Controller
@@ -25,7 +27,7 @@ class EventController extends Controller
         $events = $filter->orderBy('start_date')->paginate(10);
         return Inertia::render('Admin/Event/Index', [
             'events' => $events,
-            'filters' => $request->only(['type', 'title'])
+            'filters' => $request->only(['type'])
         ]);
     }
 
@@ -92,8 +94,9 @@ class EventController extends Controller
     {
         $image_path = $event->image;
         if($request->hasFile('banner'))
-        {
-            $this->deleteFile($event->image);
+        {   
+            if($event->image != null)
+                $this->deleteFile($image_path);
             $image_path = $request->file('banner')->store($this->path, $this->disk);
         }
         $event->update($request->validated() + [
@@ -110,15 +113,47 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
+        if($event->image != null)
+            $this->deleteFile($event->image);
         $event->delete();
         return back()->with('success', 'Event Deleted Successfully!');
     }
 
     private function filterQuery($query)
     {
-        if(request()->filled('title')) {
-            $query->where('title', request()->title);
+        if(request()->filled('type'))
+        {
+            if(request()->type == 'upcomming')
+            {
+                $query->whereDate('start_date', '>' , date('Y-m-d'));
+            }
+            if(request()->type == 'running')
+            {
+                $query->whereDate('start_date', '<=' , date('Y-m-d'))
+                    ->whereDate('end_date', '>=', date('Y-m-d'));
+            }
+            if(request()->type == 'finished')
+            {
+                $query->whereDate('end_date', '<' , date('Y-m-d'));
+            }
+            if(request()->type == 'latest_upcomming')
+            {
+                $query->whereDate('start_date', '>' , date('Y-m-d'))
+                    ->whereDate('start_date', '<=', Carbon::today()->addDays(7));
+            }
+            if(request()->type == 'earliest_finish')
+            {
+                $query->whereDate('end_date', '<' , date('Y-m-d'))
+                    ->whereDate('end_date', '>=', Carbon::today()->subDays(7));
+            }
         }
         return $query;
+    }
+    public function deleteFile($image)
+    {
+        if(Storage::exists($image))
+        {
+            Storage::delete($image);
+        }
     }
 }

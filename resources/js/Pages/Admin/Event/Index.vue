@@ -1,12 +1,12 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import Pagination from "@/Components/Pagination.vue";
 
 const props = defineProps({
     events: Object,
-    filters: Object
-})
+    filters: Object,
+});
 const form = useForm();
 
 function destroy(id) {
@@ -14,7 +14,6 @@ function destroy(id) {
         form.delete(route("admin.events.destroy", id));
     }
 }
-
 </script>
 
 <template>
@@ -30,10 +29,37 @@ function destroy(id) {
         <div class="card">
             <div class="card-header">
                 Event Manager
-                <Link :href="route('admin.events.create')"
-                    class="btn btn-sm btn-outline-primary float-end">
-                    <i class="bi bi-plus"></i> Add Events
-                </Link>
+                <span class="btn-group float-end">
+                    <Link
+                        :href="route('admin.events.create')"
+                        class="btn btn-sm btn-outline-primary"
+                    >
+                        <i class="bi bi-plus"></i> Add Events
+                    </Link>
+                    <span class="dropdown">
+                        <button
+                            class="btn btn-sm btn-outline-info dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            Filter
+                        </button>
+                        <ul
+                            class="dropdown-menu"
+                            aria-labelledby="dropdownMenuButton1"
+                        >
+                            <li><Link class="dropdown-item" :href="route('admin.events.index')">All</Link></li>
+                            <li><Link class="dropdown-item" :href="route('admin.events.index', {type: 'upcomming'})">Upcomming</Link></li>
+                            <li><Link class="dropdown-item" :href="route('admin.events.index', {type: 'running'})">Running</Link></li>
+                            <li><Link class="dropdown-item" :href="route('admin.events.index', {type: 'finished'})">finished</Link></li>
+                            <li><Link class="dropdown-item" :href="route('admin.events.index', {type: 'latest_upcomming'})">Upcomming within 7 days</Link></li>
+                            <li><Link class="dropdown-item" :href="route('admin.events.index', {type: 'earliest_finish'})">finished within 7days</Link></li>
+                        </ul>
+                    </span>
+                    
+                </span>
             </div>
             <div class="card-body">
                 <table class="table table-bordered">
@@ -49,18 +75,22 @@ function destroy(id) {
                     </thead>
                     <tbody v-if="events.data.length > 0">
                         <tr v-for="(event, index) in events.data" :key="index">
-                            <td>{{++index}}</td>
-                            <td>{{event.title}}</td>
-                            <td>{{event.start_date}}</td>
-                            <td>{{event.end_date}}</td>
+                            <td>{{ ++index }}</td>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.start_date }}</td>
+                            <td>{{ event.end_date }}</td>
                             <td><p v-html="event.status"></p></td>
                             <td>
-                                <Link :href="route('admin.events.show', event.id)"
-                                    class="btn btn-sm btn-outline-info">
+                                <Link
+                                    :href="route('admin.events.show', event.id)"
+                                    class="btn btn-sm btn-outline-info"
+                                >
                                     <i class="bi bi-eye"></i>
                                 </Link>
-                                <Link :href="route('admin.events.edit', event.id)"
-                                    class="btn btn-sm btn-outline-warning">
+                                <Link
+                                    :href="route('admin.events.edit', event.id)"
+                                    class="btn btn-sm btn-outline-warning"
+                                >
                                     <i class="bi bi-pencil-square"></i>
                                 </Link>
                                 <button
@@ -75,14 +105,19 @@ function destroy(id) {
                     <tbody v-else>
                         <tr>
                             <td colspan="6">
-                                <div class="alert alert-info text-center">No Events Found!  </div>   
+                                <div class="alert alert-info text-center">
+                                    No Events Found!
+                                </div>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="6">
-                                <Pagination class="mt-6" :links="events.links" />
+                                <Pagination
+                                    class="mt-6"
+                                    :links="events.links"
+                                />
                             </td>
                         </tr>
                     </tfoot>
