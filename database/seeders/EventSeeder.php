@@ -30,10 +30,10 @@ class EventSeeder extends Seeder
         ]);
         Event::factory()->create([
             'start_date' => Carbon::today()->addDays(10)->format('Y-m-d'),
-            'end_date' => Carbon::tomorrow()->subDays(10)->format('Y-m-d'),
+            'end_date' => Carbon::tomorrow()->addDays(10)->format('Y-m-d'),
         ]);
         Event::factory()->create([
-            'start_date' => Carbon::today()->addDays(3)->format('Y-m-d'),
+            'start_date' => Carbon::today()->subDays(3)->format('Y-m-d'),
             'end_date' => Carbon::tomorrow()->subDays(3)->format('Y-m-d'),
         ]);
     }
